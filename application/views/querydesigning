@@ -1,0 +1,67 @@
+		Fields
+
+clientCode - tbl_client AS c
+Project Name - tbl_project AS p
+Task No  - tbl_project_task   AS pt
+Task Title - tbl_project_task AS pt
+priority  - tbl_allocationDetail AS ad
+startDate - tbl_allocation AS a
+endDate  - tbl_allocation AS a
+allocatedDate - tbl_allocationDetails AS a
+estimated time - tbl_allocation AS a
+spent time - tbl_allocationDetail AS ad
+allocated by  - tbl_allocation AS a
+allocated to - tbl_allocation AS a
+status - tbl_allocationDetail AS ad
+total tracked time
+Total Chargeable Time
+
+
+
+
+select 
+
+
+c.clientCode,
+pt.task_code,
+pt.title,
+p.project_title,
+p.project_code,
+a.startDate,
+a.endDate,
+a.allocated_time,
+a.allocatedById,
+a.allocatedToId,
+ad.spentTime,
+ad.status,
+ad.priority,
+ad.allocated_date,
+ad.ad_id,
+w.startTime,
+w.endTime,
+w.workDate 
+
+
+FROM tbl_project_task AS pt,tbl_project AS p,tbl_allocationDetail AS ad,tbl_allocation AS a,tbl_client AS c,tbl_workdetail AS w 
+
+
+
+
+
+pt.projectID = p.project_id AND
+a.projectTaskId = pt.pt_id AND 
+a.al_id = ad.allocation_id AND 
+a.allocatedToId = $uid AND 
+c.co_id = p.client_id AND 
+ad.allocated_date <= '$d' AND 
+ad.status != 2 
+
+
+ORDER BY ad.allocated_date DESC
+
+
+
+
+
+
+

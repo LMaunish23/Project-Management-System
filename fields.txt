@@ -1,0 +1,69 @@
+Employee Fields
+
+
+fname
+mname
+lname
+birthdate
+designation
+joiningdate
+pimage
+contact
+skypeid
+caddress
+paddress
+username
+pemail
+cemail
+password
+
+
+
+Company Fields
+
+
+cname
+website
+email
+aemail
+bemail
+contact
+address
+account_manager :- am_id
+project_manager :- pm_id
+team_leader :-  tl_id
+city
+country
+currency
+comment
+
+
+
+
+task fields
+
+
+
+
+
+
+
+project fields
+
+
+ptitle
+com_id
+account_manager :- am_id
+project_manager :- pm_id
+team_leader :-  tl_id
+is_ongoing
+pstatus
+bookdate
+psdate
+pedate
+is_billable
+et
+technology
+remark
+is_active
+

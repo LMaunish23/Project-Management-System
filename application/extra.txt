@@ -1,0 +1,181 @@
+<!-- controller -->
+public function fetch_data()
+	{
+		$output = '';
+		$query = '';		
+		if($this->input->post('query'))
+		{
+			$query = $this->input->post('query');
+		}
+		$data = $this->main_model->fetch_data($query);
+		if($data->num_rows() > 0)
+		{
+			$n = 0;
+			foreach ($data->result() as $row) 
+			{
+				$output.='<option class="search" style="cursor:pointer" id="'.++$n.'">'.$row->name.'</option>';
+			}
+		}
+		else
+		{
+			$output.='<option>No Record Found</option>';
+		}
+		echo $output;
+	}
+
+
+
+
+
+	<!-- model -->
+
+
+	public function fetch_data($query)
+	{		
+		$this->db->select("*");
+		$this->db->from("tbl_company");
+		if($query != '')
+		{
+			$this->db->like('name',$query);
+		}
+		return $this->db->get();
+	}
+
+
+
+script----------------------
+
+<script type="text/javascript">
+    
+    
+    function loaddata(query)
+    {          
+            $.ajax({
+               url:"<?php echo base_url('index.php/admin_controller/fetch_data'); ?>",
+               type:"POST",
+               data:{query:query},
+               success:function(data){                  
+                  $('#abc').show();
+                  $('#abc').html(data);                                             
+                  $('#csearch').text = data;
+               }               
+            })
+    }
+
+
+   $('#csearch').keyup(function(){
+            var searchval =  $(this).val();
+            if(searchval != '')
+            {          
+                loaddata(searchval);            
+            }
+            else 
+            {
+               $('#abc').hide();
+            }          
+   });  
+ 
+</script>
+
+
+
+
+
+-----------------input
+
+
+
+
+<i class="fa fa-search" style="position: absolute;top: 11px;left: 4%;font-size: 15px;"></i>  <input type="text" style="background-color: #A9CCE3;font-weight: bolder;text-indent: 30px;" name="csearch" id="csearch" class="form-control">                                      
+                    <a href="<?php echo base_url('index.php/admin_controller/company_addpage'); ?>"><i class="fa fa-plus" style="position: absolute;top: 11px;left: 94%;font-size: 15px;"></i></a>
+                    <div id="abc" class="form-control" style="background-color: #F2F4F4;display: none;"></div>
+
+
+
+
+--------Ajax Extra---------------------------------------------
+
+var search =  $(this).val();
+
+            
+
+
+
+
+
+            function loaddata(query)
+        {
+            $.ajax({
+               url:"<?php echo base_url(); ?>admin_controller/fetch_data",
+               method:"POST",
+               data:{query:query},
+               success:function(data){
+                  $('#abc').html(data);
+
+               }
+            })
+        }
+
+
+
+
+<input type="text" style="background-color: #A9CCE3;font-weight: bolder;text-indent: 30px;" name="csearch" id="csearch" class="form-control">                                      
+                    <a href="<?php echo base_url('index.php/admin_controller/company_addpage'); ?>"><i class="fa fa-plus" style="position: absolute;top: 11px;left: 94%;font-size: 15px;"></i></a>
+                    <div id="abc" class="form-control" style="background-color: #F2F4F4;display: none;"></div>
+
+
+
+
+
+
+<i class="fa fa-search" style="position: absolute;top: 11px;left: 4%;font-size: 15px;"></i>                     
+                    <input type="text" style="background-color: #A9CCE3;font-weight: bolder;text-indent: 30px;" name="csearch" id="csearch" class="form-control">
+                     
+                    <a href="<?php echo base_url('index.php/admin_controller/company_addpage'); ?>"><i class="fa fa-plus" style="position: absolute;top: 11px;left: 94%;font-size: 15px;"></i></a>
+
+
+------------------------------------------------------------
+
+
+
+
+
+query 
+
+
+
+
+SELECT tbl_project_task.pt_id from tbl_project_task,tbl_project WHERE tbl_project_task.projectID = tbl_project.project_id AND tbl_project.project_manager_id = 2
+
+
+
+
+
+
+
+
+SELECT *
+FROM `tbl_project_task`
+WHERE projectID IN (SELECT `project_manager_id`
+FROM `tbl_project`
+WHERE `project_manager_id` = `$id`)
+ORDER BY `pt_id` ASC
+ LIMIT 10
+
+
+
+
+
+ $id = $_SESSION['user_id'];
+    $this->db->select('project_manager_id')->from('tbl_project')->where('project_manager_id = $id');
+    $subQuery =  $this->db->get_compiled_select();
+ 
+    // Main Query
+    $this->db->select('*')->from('tbl_project_task')->where("projectID IN ($subQuery)", NULL, FALSE);
+
+
+
+
+
+
+    $this->db->from('tbl_project_task','tbl_project')->where('`project_id` IN (SELECT `project_manager_id` FROM `tbl_project`)', NULL, FALSE);
